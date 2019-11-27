@@ -7,6 +7,7 @@ public class RandomTest
 {
     @Test
     public void testTrue() {
-        assertTrue(true);
+
+        assertTrue(false);
     }
 }
