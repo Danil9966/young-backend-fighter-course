@@ -42,7 +42,13 @@
             </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+    <repository>
+        <id>dev</id>
+        <name>Local repository</name>
+        <url>file://${user.home}/.m2/repository</url>
+    </repository>
+    </distributionManagement>
     <modules>
         <module>child1</module>
       <module>child2</module>
