@@ -1,4 +1,4 @@
-package filter;
+package groupId.filter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

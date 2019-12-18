@@ -8,7 +8,6 @@
     <groupId>groupId</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
   <groupId>groupId</groupId>
   <artifactId>child1</artifactId>
   <version>1.0-SNAPSHOT</version>

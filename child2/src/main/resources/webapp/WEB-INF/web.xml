@@ -7,11 +7,11 @@
 
     <servlet>
         <servlet-name>mainServlet</servlet-name>
-        <servlet-class>servlet.InitialServlet</servlet-class>
+        <servlet-class>groupId.servlet.InitialServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>secondaryServlet</servlet-name>
-        <servlet-class>servlet.SecondaryServlet</servlet-class>
+        <servlet-class>groupId.servlet.SecondaryServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -26,7 +26,7 @@
 
     <filter>
         <filter-name>initialFilter</filter-name>
-        <filter-class>filter.InitialFilter</filter-class>
+        <filter-class>groupId.filter.InitialFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>initialFilter</filter-name>
@@ -35,7 +35,7 @@
 
     <filter>
         <filter-name>postFilter</filter-name>
-        <filter-class>filter.PostFilter</filter-class>
+        <filter-class>groupId.filter.PostFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>postFilter</filter-name>

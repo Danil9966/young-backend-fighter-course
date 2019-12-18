@@ -1,6 +1,5 @@
-package servlet;
+package groupId.servlet;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,12 +11,13 @@ public class SecondaryServlet  extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp ) throws IOException
     {
-        ServletContext ctx = req.getServletContext();
-//        ctx.setAttribute( "user", ",p;," );
-        String user = (String) ctx.getAttribute( "user" );
-        ctx.removeAttribute( "user" );
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         PrintWriter out = resp.getWriter();
-//        out.write( "Hi " + user );
+        out.write( "Hi "  );
     }
 }

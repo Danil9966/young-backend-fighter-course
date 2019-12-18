@@ -1,4 +1,4 @@
-package filter;
+package groupId.filter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,9 +10,9 @@ import java.io.IOException;
 
 public class PostFilter implements Filter {
 
-    public void init(FilterConfig filterConfig)  {
+    public void init(FilterConfig filterConfig) {
 // default implementation
-   }
+    }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
@@ -24,3 +24,4 @@ public class PostFilter implements Filter {
     public void destroy() {
         //default implementation
     }
+}
