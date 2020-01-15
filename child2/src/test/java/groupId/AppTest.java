@@ -26,11 +26,12 @@ public class AppTest {
 
     Callable<Integer> ping = () -> {
         try {
-            HttpResponse<String> httpResponse = Unirest.get("http://localhost:8080/child2-1.0-SNAPSHOT/")
+            HttpResponse<String> httpResponse = Unirest.get("http://localhost:8080/child2-1.0-SNAPSHOT/home")
                     .asString();
             if (httpResponse.getStatus() == 200) {
                 return 200;
             }
+            else throw new UnirestException("danno");
 
         } catch (UnirestException e) {
             System.out.println(e.toString());
@@ -48,7 +49,7 @@ public class AppTest {
 
 
         Collection<Callable<Integer>> callables = new ArrayList<>();
-        IntStream.rangeClosed(1, 8).forEach(i-> {
+        IntStream.rangeClosed(1, 100).forEach(i-> {
             callables.add(ping);
         });
 

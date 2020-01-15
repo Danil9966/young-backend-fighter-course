@@ -14,5 +14,11 @@ public class InitialServlet  extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         writer.print("Yo");
         writer.close();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
