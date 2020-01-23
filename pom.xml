@@ -47,7 +47,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.9.10</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
 
     </dependencies>
@@ -58,9 +57,9 @@
                 <!--why war help downloads something from maven central-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <webXml>src\main\resources\webapp\WEB-INF\web.xml</webXml>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<webXml>src\main\resources\webapp\WEB-INF\web.xml</webXml>-->
+                <!--</configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
