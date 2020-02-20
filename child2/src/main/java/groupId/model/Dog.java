@@ -1,84 +1,39 @@
 package groupId.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode
+@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Dog {
+    @NotBlank
     String name;
-    double height;
+    Double height;
+    @PastOrPresent
     LocalDate dateOfBirth;
-    double weight;
-    int id;
+    Integer age;
+    Double weight;
 
-    public String getName() {
-        return name;
-    }
+    @Positive
+    Integer id;
 
-    public String getId() {
-        return name;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-
-
-    public Dog(String name, LocalDate dateOfBirth, double weight, double height, int id) {
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.weight = weight;
-        this.height = height;
-        this.id = id;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-    public void setId() {
-        this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Dog)) return false;
-        Dog dog = (Dog) o;
-        return Double.compare(dog.height, height) == 0 &&
-                Double.compare(dog.weight, weight) == 0 &&
-                Objects.equals(name, dog.name) &&
-                Objects.equals(dateOfBirth, dog.dateOfBirth);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(name, height, dateOfBirth, weight);
-    }
-
+    Boolean deleted;
 }
