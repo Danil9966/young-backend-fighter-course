@@ -1,8 +1,7 @@
 package groupId.unit;
 
 import groupId.model.Dog;
-import groupId.resource.MainController;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -11,11 +10,13 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 
+import static groupId.CommonTestUtil.getConsistentDoggie;
+import static org.testng.Assert.assertTrue;
+
 public class MainControllerTest {
-    @Autowired
-    MainController controller;
 
     Validator validator;
+
     @BeforeClass
     public void setUp() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -24,8 +25,28 @@ public class MainControllerTest {
 
     @Test
     public void testNegativeAge(){
-        Dog doggie = new Dog().setAge(4).setName("fsdaf").setDateOfBirth(LocalDate.of(2020, 1, 21)).setWeight(3.0).setId(9);
-        controller.createDoggy(doggie);
-        System.out.println(validator.validate(doggie).size());
+
+        Dog doggie = getConsistentDoggie()
+                .setDateOfBirth(LocalDate.of(2028, 1, 21));
+        assertTrue(isValidationFailed(doggie));
+    }
+    @Test
+    public void testBlankNameDog(){
+
+        Dog doggie = getConsistentDoggie()
+                .setName("");
+        assertTrue(isValidationFailed(doggie));
+    }
+
+    @Test
+    public void testConsistentDogCreation(){
+
+        Dog doggie = getConsistentDoggie();
+
+        assertTrue(!isValidationFailed(doggie));
+    }
+
+    private boolean isValidationFailed(Dog doggie) {
+        return !validator.validate(doggie).isEmpty();
     }
 }

@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 /**
  * Unit test for simple App.
  */
-public class AppTest {
+public class TomcatTest {
 
 
     Callable<Integer> ping = () -> {

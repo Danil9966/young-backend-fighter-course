@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -26,6 +27,8 @@ import java.util.Objects;
 public class Dog {
     @NotBlank
     String name;
+    @Positive
+    @NonNull
     Double height;
     @PastOrPresent
     LocalDate dateOfBirth;
@@ -35,5 +38,5 @@ public class Dog {
     @Positive
     Integer id;
 
-    Boolean deleted;
+    Boolean deleted = false;
 }

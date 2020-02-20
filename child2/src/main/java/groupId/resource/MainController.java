@@ -4,6 +4,7 @@ import groupId.model.Dog;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class MainController {
         return doggies.entrySet()
                 .stream()
                 .map(Map.Entry::getValue)
+                .filter(dog -> !dog.getDeleted())
                 .collect(Collectors.toList());
     }
 
@@ -62,29 +64,30 @@ public class MainController {
     }
 
     @PostMapping("dog")
-    public Dog createDoggy(@RequestBody Dog requestBody) {
+    public Dog createDoggy(@RequestBody @Valid Dog requestBody) {
         Dog result;
 
-       do {
-           idSequenceCheck();
+        do {
+            idSequenceCheck();
 
-           result = doggies.putIfAbsent(id, requestBody.setId(id));
-           id ++;
-       } while (result != null);
+            result = doggies.putIfAbsent(id, requestBody.setId(id));
+            id++;
+        } while (result != null);
 
         return doggies.get(requestBody.getId());
     }
 
+    //мб здесь больше подходит @PutMapping
+    @DeleteMapping(value = "/dog/{id}")
+    public Dog deleteDog(@PathVariable Integer id) {
+
+        return doggies.computeIfPresent(id, (k, v) -> v.setDeleted(true));
+    }
+
     private void idSequenceCheck() {
-        if(id.equals(Integer.MAX_VALUE)) {
+        if (id.equals(Integer.MAX_VALUE)) {
             id = 1;
         }
     }
 
-
-    @DeleteMapping(value = "/dog/{id}")
-    public void deleteDog(@PathVariable Integer id) {
-
-        doggies.computeIfPresent(id, (k, v) -> v.setDeleted(true));
-    }
 }
