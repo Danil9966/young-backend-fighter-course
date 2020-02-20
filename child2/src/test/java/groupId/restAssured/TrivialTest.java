@@ -1,5 +1,6 @@
 package groupId.restAssured;
 
+import static groupId.CommonTestUtil.DOGGIE_URL;
 import static groupId.CommonTestUtil.getConsistentDoggie;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
@@ -13,12 +14,11 @@ import org.testng.annotations.Test;
 
 public class TrivialTest {
 
-    private static final String URL = "http://localhost:8080/child2-1.0-SNAPSHOT/";
 
     @Test
     public void healthCheck() {
 
-        given().when().get(URL + "dogs/1")
+        given().when().get(DOGGIE_URL + "dogs/1")
                 .then()
                 .statusCode(200)
                 .assertThat()
@@ -31,7 +31,7 @@ public class TrivialTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .when()
-                .request("POST", URL + "dog")
+                .request("POST", DOGGIE_URL + "dog")
                 .then()
                 .statusCode(400);
     }
@@ -42,7 +42,7 @@ public class TrivialTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .when()
-                .request("POST", URL + "dog")
+                .request("POST", DOGGIE_URL + "dog")
                 .then()
                 .statusCode(400);
     }
@@ -53,7 +53,7 @@ public class TrivialTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .when()
-                .request("POST", URL + "dog")
+                .request("POST", DOGGIE_URL + "dog")
                 .then()
                 .statusCode(400);
     }
@@ -65,9 +65,10 @@ public class TrivialTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .when()
-                .request("POST", URL + "dog")
+                .request("POST", DOGGIE_URL + "dog")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .body("name", equalTo(getConsistentDoggie().getName()));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class TrivialTest {
                 with()
                 .contentType(ContentType.JSON)
                 .when()
-                .request("DELETE", URL + "dog/3")
+                .request("DELETE", DOGGIE_URL + "dog/3")
                 .then()
                 .statusCode(200).body("name", equalTo("Mr Pickles"));
 
