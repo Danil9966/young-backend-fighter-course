@@ -1,16 +1,13 @@
 package groupId.restAssured;
 
+import io.restassured.http.ContentType;
+import org.testng.annotations.Test;
+
 import static groupId.CommonTestUtil.DOGGIE_URL;
 import static groupId.CommonTestUtil.getConsistentDoggie;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-
-
-import groupId.model.Dog;
-import io.restassured.http.ContentType;
-import org.testng.annotations.Test;
 
 public class TrivialTest {
 

@@ -4,5 +4,16 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <mvc:annotation-driven/>
-    <context:component-scan base-package="groupId.resource" />
+    <context:component-scan base-package="groupId" />
+    <bean name="dataSource" class="org.h2.jdbcx.JdbcDataSource">
+        <property name="url" value="jdbc:h2:mem:testdb"/>
+    </bean>
+
+    <bean name="jdbcDogDao" class="groupId.dao.JdbcDogDao">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean class="groupId.resource.MainController" >
+        <constructor-arg ref="jdbcDogDao"/>
+    </bean>
 </beans>

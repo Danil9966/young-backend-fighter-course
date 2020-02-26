@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
@@ -28,11 +29,13 @@ public class Dog {
     @NotBlank
     String name;
     @Positive
-    @NonNull
+    @NotNull
     Double height;
     @PastOrPresent
     LocalDate dateOfBirth;
     Integer age;
+    @Positive
+    @NotNull
     Double weight;
 
     @Positive
