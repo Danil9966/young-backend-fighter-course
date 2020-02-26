@@ -11,5 +11,5 @@ public interface DogDao {
 
     Dog createDog(Dog doggie);
 
-    Dog deleteDog();
+    Dog deleteDog(Integer id);
 }

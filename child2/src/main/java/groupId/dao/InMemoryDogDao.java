@@ -68,7 +68,7 @@ public class InMemoryDogDao implements DogDao {
         return doggies.get(doggie.getId());
     }
     @Override
-    public Dog deleteDog(){
+    public Dog deleteDog(Integer id){
         return doggies.computeIfPresent(id, (k, v) -> v.setDeleted(true));
 
     }
