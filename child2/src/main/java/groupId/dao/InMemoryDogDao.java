@@ -70,7 +70,6 @@ public class InMemoryDogDao implements DogDao {
     @Override
     public Dog deleteDog(Integer id){
         return doggies.computeIfPresent(id, (k, v) -> v.setDeleted(true));
-
     }
 
     private void idSequenceCheck() {

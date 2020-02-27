@@ -50,7 +50,7 @@ public class MainController {
     //мб здесь больше подходит @PutMapping
     @DeleteMapping(value = "/dog/{id}")
     public Dog deleteDog(@PathVariable Integer id) {
-        return dogDao.deleteDog();
+        return dogDao.deleteDog(id);
     }
 
 

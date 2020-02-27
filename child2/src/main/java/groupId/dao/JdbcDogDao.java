@@ -18,27 +18,31 @@ public class JdbcDogDao implements DogDao {
     DataSource dataSource;
 
     JdbcDogDao(DataSource dataSource) throws SQLException {
+        this.dataSource = dataSource;
         final Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
+
         statement.execute(
-                "CREATE TABLE DOGGIE (\n" +
+                "DROP TABLE DOGGIES IF EXISTS  ;");
+        statement.execute(
+                "CREATE TABLE DOGGIES (\n" +
                         "  id INTEGER NOT NULL auto_increment primary key ,\n" +
                         "  name varchar(255) NOT NULL default '',\n" +
                         "  height double NOT NULL,\n" +
                         "  weight double NOT NULL,\n" +
                         "  age INTEGER ,\n" +
-                        "  dateOfBirth double NOT NULL,\n" +
-                        "  deleted bit default false ,\n" +
+                        "  dateOfBirth DATE NOT NULL,\n" +
+                        "  deleted bit default false \n" +
 
                         ");");
 
         statement.executeUpdate(
-                "INSERT INTO DOGGIE (name, height, weight, dateOfBirth)" +
+                "INSERT INTO DOGGIES (name, height, weight, dateOfBirth)" +
                         " VALUES " +
-                        " ('Leyla',20.0, 3.0, '2019.05.05')" +
-                        " ('Betty',20.0, 3.0, '2005.05.01')" +
-                        " ('Mr Pickles',20.0, 3.0, '2005.05.01')" +
-                        " ('Bim',20.0, 3.0, '1444.05.01');"
+                        " ('Leyla',20.0, 3.0, '2019-05-05')," +
+                        " ('Betty',20.0, 3.0, '2005-05-01')," +
+                        " ('Mr Pickles',20.0, 3.0, '2005-05-01')," +
+                        " ('Bim',20.0, 3.0, '1444-05-01');"
         );
 
         connection.close();
@@ -108,7 +112,7 @@ public class JdbcDogDao implements DogDao {
             connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(
-                    String.format("INSERT INTO DOGGIE (name, height, weight, age, dateOfBirth)" +
+                    String.format("INSERT INTO DOGGIES (name, height, weight, age, dateOfBirth)" +
                                     " VALUES " +
                                     " ('%s',%s, %s, %s, '%s');",
                             doggie.getName(), doggie.getHeight(), doggie.getWeight(), doggie.getAge(), doggie.getDateOfBirth())
@@ -131,7 +135,7 @@ public class JdbcDogDao implements DogDao {
             connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(
-                    String.format("UPDATE DOG SET deleted = true where id = %s);",
+                    String.format("UPDATE DOGGIES SET deleted = true where id = %s;",
                             id)
             );
             //?

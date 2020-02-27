@@ -6,7 +6,10 @@
     <mvc:annotation-driven/>
     <context:component-scan base-package="groupId" />
     <bean name="dataSource" class="org.h2.jdbcx.JdbcDataSource">
-        <property name="url" value="jdbc:h2:mem:testdb"/>
+        <property name="url" value="jdbc:h2:mem:prod;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false"/>
+        <property name="user" value="admin"/>
+        <property name="password" value="admin"/>
+
     </bean>
 
     <bean name="jdbcDogDao" class="groupId.dao.JdbcDogDao">

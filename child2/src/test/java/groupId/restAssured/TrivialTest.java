@@ -1,7 +1,11 @@
 package groupId.restAssured;
 
+import groupId.model.Dog;
 import io.restassured.http.ContentType;
+import io.restassured.mapper.ObjectMapperType;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
 
 import static groupId.CommonTestUtil.DOGGIE_URL;
 import static groupId.CommonTestUtil.getConsistentDoggie;
@@ -78,12 +82,11 @@ public class TrivialTest {
                 .statusCode(200).body("name", equalTo("Mr Pickles"));
 
 
+//
+//        given().when().get(DOGGIE_URL + "dogs")
+//                .thenReturn()
+//                .as(ArrayList.class, ObjectMapperType.JACKSON_2).forEach(e ->((Dog)e).getDeleted().equals(false));
 
-                //как по нормальному работать с массивами в rest assured
-//        given().when().get(URL + "dogs")
-//                .then()
-//                .assertThat()
-//                .body("", hasItems(""));
 
     }
 
