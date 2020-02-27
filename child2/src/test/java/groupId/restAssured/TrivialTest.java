@@ -1,6 +1,5 @@
 package groupId.restAssured;
 
-import groupId.model.Dog;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import org.testng.annotations.Test;
@@ -74,7 +73,9 @@ public class TrivialTest {
 
     @Test
     public void successfullDeletingOfDog() {
-                with()
+        checkNumberOfAvailableDogsEqualTo(4);
+
+        with()
                 .contentType(ContentType.JSON)
                 .when()
                 .request("DELETE", DOGGIE_URL + "dog/3")
@@ -82,12 +83,14 @@ public class TrivialTest {
                 .statusCode(200).body("name", equalTo("Mr Pickles"));
 
 
-//
-//        given().when().get(DOGGIE_URL + "dogs")
-//                .thenReturn()
-//                .as(ArrayList.class, ObjectMapperType.JACKSON_2).forEach(e ->((Dog)e).getDeleted().equals(false));
+        checkNumberOfAvailableDogsEqualTo(3);
 
+    }
 
+    private void checkNumberOfAvailableDogsEqualTo(int numOfDogs) {
+        assert (given().when().get(DOGGIE_URL + "dogs")
+                .thenReturn()
+                .as(ArrayList.class, ObjectMapperType.JACKSON_2).size()== numOfDogs);
     }
 
 
