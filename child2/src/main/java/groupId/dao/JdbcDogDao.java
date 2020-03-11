@@ -1,6 +1,7 @@
 package groupId.dao;
 
 import groupId.model.Dog;
+import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,38 +15,15 @@ import java.util.List;
 
 public class JdbcDogDao implements DogDao {
 
+    private Flyway flyway;
 
-    DataSource dataSource;
+    private DataSource dataSource;
 
-    JdbcDogDao(DataSource dataSource) throws SQLException {
+    JdbcDogDao(DataSource dataSource, Flyway flyway) throws SQLException {
+        this.flyway = flyway;
         this.dataSource = dataSource;
-        final Connection connection = dataSource.getConnection();
-        Statement statement = connection.createStatement();
+//        this.flyway.migrate();
 
-        statement.execute(
-                "DROP TABLE DOGGIES IF EXISTS  ;");
-        statement.execute(
-                "CREATE TABLE DOGGIES (\n" +
-                        "  id INTEGER NOT NULL auto_increment primary key ,\n" +
-                        "  name varchar(255) NOT NULL default '',\n" +
-                        "  height double NOT NULL,\n" +
-                        "  weight double NOT NULL,\n" +
-                        "  age INTEGER ,\n" +
-                        "  dateOfBirth DATE NOT NULL,\n" +
-                        "  deleted bit default false \n" +
-
-                        ");");
-
-        statement.executeUpdate(
-                "INSERT INTO DOGGIES (name, height, weight, dateOfBirth)" +
-                        " VALUES " +
-                        " ('Leyla',20.0, 3.0, '2019-05-05')," +
-                        " ('Betty',20.0, 3.0, '2005-05-01')," +
-                        " ('Mr Pickles',20.0, 3.0, '2005-05-01')," +
-                        " ('Bim',20.0, 3.0, '1444-05-01');"
-        );
-
-        connection.close();
 
     }
 
@@ -127,7 +105,7 @@ public class JdbcDogDao implements DogDao {
     }
 
     @Override
-    public Dog deleteDog(Integer id){
+    public Dog deleteDog(Integer id) {
 
         Dog result = null;
         Connection connection;
