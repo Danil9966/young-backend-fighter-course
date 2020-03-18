@@ -1,7 +1,7 @@
 package groupId.resource;
 
-import groupId.dao.DogDao;
 import groupId.model.Dog;
+import groupId.service.DogService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +19,11 @@ import java.util.List;
 public class MainController {
 
 
-    DogDao dogDao;
+    private final DogService dogService;
 
 
-    public MainController(DogDao dogDao) {
-        this.dogDao = dogDao;
+    public MainController(DogService dogService) {
+        this.dogService = dogService;
     }
 
     @GetMapping("hi-Mark")
@@ -31,26 +31,24 @@ public class MainController {
         return "What a story Mark!";
     }
 
-
     @GetMapping("dogs")
     public List<Dog> getAllDoggies() {
-        return dogDao.getAllDoggies();
+        return dogService.getAllDoggies();
     }
 
     @GetMapping("dogs/{id}")
     public Dog getDog(@PathVariable Integer id) {
-        return dogDao.getDog(id);
+        return dogService.getDog(id);
     }
 
     @PostMapping("dog")
     public Dog createDoggy(@RequestBody @Valid Dog requestBody) {
-        return dogDao.createDog(requestBody);
+        return dogService.createDog(requestBody);
     }
 
-    //мб здесь больше подходит @PutMapping
     @DeleteMapping(value = "/dog/{id}")
     public Dog deleteDog(@PathVariable Integer id) {
-        return dogDao.deleteDog(id);
+        return dogService.deleteDog(id);
     }
 
 

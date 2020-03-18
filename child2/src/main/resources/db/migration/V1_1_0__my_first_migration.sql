@@ -1,5 +1,3 @@
-
-DROP TABLE IF EXISTS DOGGIES;
 CREATE TABLE DOGGIES (
   id INTEGER NOT NULL auto_increment primary key ,
   name varchar(255) NOT NULL default '',

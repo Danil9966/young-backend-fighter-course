@@ -4,10 +4,7 @@ import groupId.model.Dog;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +12,10 @@ import java.util.List;
 
 public class JdbcDogDao implements DogDao {
 
-    private Flyway flyway;
+    private JdbcConnectionHolder connectionHolder;
 
-    private DataSource dataSource;
-
-    JdbcDogDao(DataSource dataSource, Flyway flyway) throws SQLException {
-        this.flyway = flyway;
-        this.dataSource = dataSource;
-//        this.flyway.migrate();
-
-
+    JdbcDogDao(JdbcConnectionHolder connectionHolder) {
+        this.connectionHolder = connectionHolder;
     }
 
     @Override
@@ -32,9 +23,9 @@ public class JdbcDogDao implements DogDao {
         List<Dog> resultList = new ArrayList<>();
         Connection connection;
         try {
-            connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM DOGGIES WHERE deleted = false");
+            connection = connectionHolder.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE deleted = false");
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 int i = 1;
@@ -49,7 +40,6 @@ public class JdbcDogDao implements DogDao {
                         ));
 
             }
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,9 +51,10 @@ public class JdbcDogDao implements DogDao {
         Dog result = new Dog();
         Connection connection;
         try {
-            connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM DOGGIES WHERE id = " + id);
+            connection = connectionHolder.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 int i = 1;
@@ -76,7 +67,6 @@ public class JdbcDogDao implements DogDao {
                         .setDateOfBirth(LocalDate.from(resultSet.getTimestamp(i).toLocalDateTime()));
 
             }
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,22 +76,25 @@ public class JdbcDogDao implements DogDao {
     @Override
     public Dog createDog(Dog doggie) {
         Connection connection;
+        Integer id;
         try {
-            connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(
-                    String.format("INSERT INTO DOGGIES (name, height, weight, age, dateOfBirth)" +
-                                    " VALUES " +
-                                    " ('%s',%s, %s, %s, '%s');",
-                            doggie.getName(), doggie.getHeight(), doggie.getWeight(), doggie.getAge(), doggie.getDateOfBirth())
-            );
+            connection = connectionHolder.getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO DOGGIES (name, height, weight, age, dateOfBirth)" +
+                    " VALUES " +
+                    " (? ,?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, doggie.getName());
+            statement.setDouble(2, doggie.getHeight());
+            statement.setDouble(3, doggie.getWeight());
+            statement.setInt(4, doggie.getAge());
+            statement.setDate(5, Date.valueOf(doggie.getDateOfBirth()));
+            id = statement.executeUpdate();
 
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
-        return doggie;
+        return getDog(id);
     }
 
     @Override
@@ -110,15 +103,12 @@ public class JdbcDogDao implements DogDao {
         Dog result = null;
         Connection connection;
         try {
-            connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(
-                    String.format("UPDATE DOGGIES SET deleted = true where id = %s;",
-                            id)
-            );
-            //?
+            connection = connectionHolder.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE DOGGIES SET deleted = true where id = ?;");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+
             result = getDog(id);
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
