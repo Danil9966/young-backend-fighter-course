@@ -2,6 +2,7 @@ package groupId.resource;
 
 import groupId.model.Dog;
 import groupId.service.DogService;
+import groupId.service.IDogService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +20,10 @@ import java.util.List;
 public class MainController {
 
 
-    private final DogService dogService;
+    private final IDogService dogService;
 
 
-    public MainController(DogService dogService) {
+    public MainController(IDogService dogService) {
         this.dogService = dogService;
     }
 

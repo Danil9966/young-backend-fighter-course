@@ -22,8 +22,13 @@
         <constructor-arg ref="jdbcConnectionHolder"/>
     </bean>
     <bean name="dogService" class="groupId.service.DogService">
-        <constructor-arg ref="jdbcConnectionHolder"/>
         <constructor-arg ref="jdbcDogDao"/>
+
+    </bean>
+
+    <bean name="transactionalDogService" class="groupId.service.TransactionalDogService">
+        <constructor-arg ref="jdbcConnectionHolder"/>
+        <constructor-arg ref="dogService"/>
 
     </bean>
     <bean id="jdbcConnectionHolder" class="groupId.dao.JdbcConnectionHolder" depends-on="flyway">
@@ -31,6 +36,6 @@
     </bean>
 
     <bean class="groupId.resource.MainController" >
-        <constructor-arg ref="dogService"/>
+        <constructor-arg ref="transactionalDogService"/>
     </bean>
 </beans>
