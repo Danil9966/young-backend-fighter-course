@@ -22,20 +22,28 @@
         <constructor-arg ref="jdbcConnectionHolder"/>
     </bean>
     <bean name="dogService" class="groupId.service.DogService">
-        <constructor-arg ref="jdbcDogDao"/>
+        <property name="dogDao" ref="jdbcDogDao"/>
 
     </bean>
 
-    <bean name="transactionalDogService" class="groupId.service.TransactionalDogService">
+    <bean name="transactionalService" class="groupId.service.TransactionalDogService">
         <constructor-arg ref="jdbcConnectionHolder"/>
         <constructor-arg ref="dogService"/>
+    </bean>
 
+    <bean name="transactionalAdvice" class="groupId.proxy.TransactionalAdvice">
+        <constructor-arg ref="jdbcConnectionHolder"/>
+    </bean>
+
+    <bean name="cglibTransactionalDogService" class="groupId.proxy.CglibTransactionalDogService">
+        <constructor-arg ref="jdbcConnectionHolder"/>
     </bean>
     <bean id="jdbcConnectionHolder" class="groupId.dao.JdbcConnectionHolder" depends-on="flyway">
         <constructor-arg ref="dataSource"/>
     </bean>
 
     <bean class="groupId.resource.MainController" >
-        <constructor-arg ref="transactionalDogService"/>
+        <constructor-arg ref="dogService"/>
+        <constructor-arg ref="transactionalAdvice"/>
     </bean>
 </beans>

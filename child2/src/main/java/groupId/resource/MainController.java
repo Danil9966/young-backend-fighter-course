@@ -1,5 +1,7 @@
 package groupId.resource;
 
+import groupId.proxy.CglibTransactionalDogService;
+import groupId.proxy.TransactionalAdvice;
 import groupId.model.Dog;
 import groupId.service.DogService;
 import groupId.service.IDogService;
@@ -20,11 +22,18 @@ import java.util.List;
 public class MainController {
 
 
-    private final IDogService dogService;
+    private IDogService dogService;
+    private final TransactionalAdvice cglibTransactionalDogService;
 
+//    @PostConstruct
+    public void init(){
+        this.dogService = cglibTransactionalDogService.getTransactionalService(dogService);
+    }
 
-    public MainController(IDogService dogService) {
+    public MainController(IDogService dogService, TransactionalAdvice transactionalService) {
         this.dogService = dogService;
+        this.cglibTransactionalDogService = transactionalService;
+        init();
     }
 
     @GetMapping("hi-Mark")

@@ -2,17 +2,21 @@ package groupId.service;
 
 import groupId.dao.DogDao;
 import groupId.model.Dog;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.util.List;
 
 public class DogService implements IDogService {
 
-    private final DogDao dogDao;
+    @Setter
+    private DogDao dogDao;
 
     DogService(DogDao dogDao) {
         this.dogDao = dogDao;
     }
+
+    DogService(){}
 
     @Override
     public List<Dog> getAllDoggies() {
