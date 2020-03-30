@@ -17,7 +17,7 @@ public class JdbcConnectionHolder {
     }
 
     @SneakyThrows
-    public Connection createConnection() {
+    private Connection createConnection() {
         Connection connection = dataSource.getConnection();
         connection.setAutoCommit(false);
         datasourceHolder.set(connection);
@@ -25,12 +25,18 @@ public class JdbcConnectionHolder {
     }
 
     public Connection getConnection() {
+        if(datasourceHolder.get()==null){
+            this.createConnection();
+        }
         return datasourceHolder.get();
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        datasourceHolder.remove();
-        super.finalize();
+    @SneakyThrows
+    public void closeConnection(){
+        if(datasourceHolder.get()!=null){
+            datasourceHolder.get().close();
+            datasourceHolder.remove();
+        }
     }
+
 }

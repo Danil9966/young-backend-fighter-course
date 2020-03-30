@@ -31,7 +31,7 @@ public class TransactionalAdvice implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         Object result = null;
-        Connection connection = connectionHolder.createConnection();
+        Connection connection = connectionHolder.getConnection();
         try {
             result = method.invoke(target,args);
             connection.commit();
@@ -39,7 +39,7 @@ public class TransactionalAdvice implements InvocationHandler {
             e.printStackTrace();
             connection.rollback();
         } finally {
-            connection.close();
+            connectionHolder.closeConnection();
         }
         return result; }
 }

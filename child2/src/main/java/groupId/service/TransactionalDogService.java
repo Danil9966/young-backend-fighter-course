@@ -20,7 +20,7 @@ public class TransactionalDogService implements IDogService {
     @SneakyThrows
     public List<Dog> getAllDoggies() {
         List<Dog> result = null;
-        Connection connection = connectionHolder.createConnection();
+        Connection connection = connectionHolder.getConnection();
         try {
             result = dogService.getAllDoggies();
             connection.commit();
@@ -37,7 +37,7 @@ public class TransactionalDogService implements IDogService {
     @SneakyThrows
     public Dog getDog(Integer id) {
         Dog result = null;
-        Connection connection = connectionHolder.createConnection();
+        Connection connection = connectionHolder.getConnection();
         try {
             result = dogService.getDog(id);
             connection.commit();
@@ -53,7 +53,7 @@ public class TransactionalDogService implements IDogService {
     @Override
     @SneakyThrows
     public Dog createDog(Dog doggie) {
-        Connection connection = connectionHolder.createConnection();
+        Connection connection = connectionHolder.getConnection();
         Dog result = null;
 
         try {
@@ -69,7 +69,7 @@ public class TransactionalDogService implements IDogService {
     @Override
     @SneakyThrows
     public Dog deleteDog(Integer id) {
-        Connection connection = connectionHolder.createConnection();
+        Connection connection = connectionHolder.getConnection();
         Dog result = null;
         try {
             result = dogService.deleteDog(id);
