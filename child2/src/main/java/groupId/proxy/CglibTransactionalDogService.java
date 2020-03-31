@@ -18,7 +18,7 @@ public class CglibTransactionalDogService {
     public CglibTransactionalDogService(JdbcConnectionHolder connectionHolder) {
         this.connectionHolder = connectionHolder;
     }
-    public static Object createProxy(JdbcConnectionHolder jdbcConnectionHolder, Object target) {
+    public static <T> T createProxy(JdbcConnectionHolder jdbcConnectionHolder, Object target) {
 //        this.target = service;
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(target.getClass());
@@ -39,7 +39,7 @@ public class CglibTransactionalDogService {
                 return result;
             } else return method.invoke(target, args);
         });
-        return enhancer.create();
+        return (T)enhancer.create();
     }
 
     ;

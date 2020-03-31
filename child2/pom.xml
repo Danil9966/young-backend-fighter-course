@@ -13,14 +13,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>child2</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <springVersion>4.3.12.RELEASE</springVersion>
+        <aspectj.version>1.8.2</aspectj.version>
     </properties>
 
     <dependencies>
@@ -116,6 +115,16 @@
             <version>5.0.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
 
     </dependencies>
     <distributionManagement>
@@ -148,6 +157,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -155,6 +165,62 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.11</version>
+
+                <configuration>
+                    <complianceLevel>8</complianceLevel>
+                    <source>8</source>
+                    <target>8</target>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <verbose>true</verbose>
+                    <Xlint>ignore</Xlint>
+                    <encoding>UTF-8</encoding>
+
+
+                    <!-- IMPORTANT-->
+                    <excludes>
+                        <exclude>**/*.java</exclude>
+                    </excludes>
+                    <forceAjcCompile>true</forceAjcCompile>
+                    <sources/>
+                    <!-- IMPORTANT-->
+
+
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <!-- use this goal to weave all your main classes -->
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <weaveDirectories>
+                                <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
+                            </weaveDirectories>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <!-- use this goal to weave all your test classes -->
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <weaveDirectories>
+                                <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>
+                            </weaveDirectories>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

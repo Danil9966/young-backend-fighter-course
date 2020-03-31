@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <mvc:annotation-driven/>
     <!--<bean name="dataSource" class="com.mysql.cj.jdbc.MysqlDataSource">-->
         <!--<property name="url" value="jdbc:mysql://localhost:3306/prod?serverTimezone=UTC" />-->
@@ -36,8 +37,9 @@
         <constructor-arg ref="dogService"/>
     </bean>
 
-    <bean name="transactionalAdvice" class="groupId.proxy.TransactionalAdvice">
+    <bean name="transactionalDogService" class="groupId.proxy.JdkTransactionalDogService" factory-method="getTransactionalService">
         <constructor-arg ref="jdbcConnectionHolder"/>
+        <constructor-arg ref="dogService"/>
     </bean>
 
     <bean name="cglibTransactionalDogService" class="groupId.proxy.CglibTransactionalDogService">
@@ -49,6 +51,10 @@
 
     <bean class="groupId.resource.MainController" >
         <constructor-arg ref="dogService"/>
-        <constructor-arg ref="transactionalAdvice"/>
+    </bean>
+
+    <aop:aspectj-autoproxy/>
+    <bean id="myAspect" class="groupId.proxy.TransactionalAspect">
+        <constructor-arg ref="jdbcConnectionHolder"/>
     </bean>
 </beans>

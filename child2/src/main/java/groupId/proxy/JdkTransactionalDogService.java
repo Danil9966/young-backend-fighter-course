@@ -9,20 +9,19 @@ import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class TransactionalAdvice implements InvocationHandler {
+public class JdkTransactionalDogService implements InvocationHandler {
 
     private Object target;
     private JdbcConnectionHolder connectionHolder;
 
-    public TransactionalAdvice(JdbcConnectionHolder connectionHolder ) {
+    public JdkTransactionalDogService(JdbcConnectionHolder connectionHolder ) {
         this.connectionHolder = connectionHolder;
     }
 
-    public IDogService getTransactionalService(IDogService dogService){
-        this.target = dogService;
-        ClassLoader cl = this.target.getClass().getClassLoader();
+    public static IDogService getTransactionalService(JdbcConnectionHolder connectionHolder, IDogService dogService){
+        ClassLoader cl = dogService.getClass().getClassLoader();
 
-        IDogService iDogService = (IDogService) Proxy.newProxyInstance(cl, new Class[]{IDogService.class}, this);
+        IDogService iDogService = (IDogService) Proxy.newProxyInstance(cl, new Class[]{IDogService.class}, new JdkTransactionalDogService(connectionHolder));
         return iDogService;
     }
 

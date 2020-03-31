@@ -1,10 +1,7 @@
 package groupId.resource;
 
-import groupId.proxy.CglibTransactionalDogService;
-import groupId.proxy.TransactionalAdvice;
 import groupId.model.Dog;
 import groupId.service.DogService;
-import groupId.service.IDogService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,18 +19,11 @@ import java.util.List;
 public class MainController {
 
 
-    private IDogService dogService;
-    private final TransactionalAdvice cglibTransactionalDogService;
+    private DogService dogService;
 
-//    @PostConstruct
-    public void init(){
-        this.dogService = cglibTransactionalDogService.getTransactionalService(dogService);
-    }
 
-    public MainController(IDogService dogService, TransactionalAdvice transactionalService) {
+    public MainController(DogService dogService) {
         this.dogService = dogService;
-        this.cglibTransactionalDogService = transactionalService;
-        init();
     }
 
     @GetMapping("hi-Mark")

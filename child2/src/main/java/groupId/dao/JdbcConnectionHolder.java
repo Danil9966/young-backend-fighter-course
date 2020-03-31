@@ -25,15 +25,30 @@ public class JdbcConnectionHolder {
     }
 
     public Connection getConnection() {
-        if(datasourceHolder.get()==null){
+        if (datasourceHolder.get() == null) {
             this.createConnection();
         }
         return datasourceHolder.get();
     }
 
     @SneakyThrows
-    public void closeConnection(){
-        if(datasourceHolder.get()!=null){
+    public void commit() {
+        if (datasourceHolder.get() != null) {
+            datasourceHolder.get().commit();
+        }
+    }
+
+
+    @SneakyThrows
+    public void rollback() {
+        if (datasourceHolder.get() != null) {
+            datasourceHolder.get().rollback();
+        }
+    }
+
+    @SneakyThrows
+    public void closeConnection() {
+        if (datasourceHolder.get() != null) {
             datasourceHolder.get().close();
             datasourceHolder.remove();
         }
