@@ -2,6 +2,7 @@ package groupId.service;
 
 import groupId.dao.DogDao;
 import groupId.model.Dog;
+import groupId.proxy.annotation.Logging;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
@@ -25,6 +26,7 @@ public class DogService implements IDogService {
 
     @Override
     @SneakyThrows
+    @Logging
     public Dog getDog(Integer id) {
         return dogDao.getDog(id);
     }

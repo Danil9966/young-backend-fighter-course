@@ -53,8 +53,8 @@
         <constructor-arg ref="dogService"/>
     </bean>
 
-    <aop:aspectj-autoproxy/>
-    <bean id="myAspect" class="groupId.proxy.TransactionalAspect">
-        <constructor-arg ref="jdbcConnectionHolder"/>
-    </bean>
+    <!--<aop:aspectj-autoproxy/>-->
+    <!--<bean id="myAspect" class="groupId.proxy.TransactionalAspect">-->
+        <!--<constructor-arg ref="jdbcConnectionHolder"/>-->
+    <!--</bean>-->
 </beans>
