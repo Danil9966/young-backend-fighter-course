@@ -26,7 +26,6 @@ public class DogService implements IDogService {
 
     @Override
     @SneakyThrows
-    @Logging
     public Dog getDog(Integer id) {
         return dogDao.getDog(id);
     }

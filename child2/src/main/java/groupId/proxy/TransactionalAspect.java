@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import java.sql.Connection;
 
 @Aspect
 public class TransactionalAspect {
@@ -18,10 +17,6 @@ public class TransactionalAspect {
         this.connectionHolder = connectionHolder;
     }
 
-    public TransactionalAspect() {
-        connectionHolder = null;
-    }
-
     @Pointcut("execution(* groupId.service.IDogService.*(..))")
     public void addTransactionToDogService() {
     }
@@ -29,7 +24,7 @@ public class TransactionalAspect {
     @Around("addTransactionToDogService()")
     public Object addTransactionToDogServiceAdvice(ProceedingJoinPoint pjp) {
         Object result = null;
-        Connection connection = connectionHolder.getConnection();
+        connectionHolder.getConnection();
         System.out.println("ASPECT JJJ");
         try {
             result = pjp.proceed();
@@ -40,6 +35,6 @@ public class TransactionalAspect {
         } finally {
             connectionHolder.closeConnection();
         }
-        return null;
+        return result;
     }
 }
