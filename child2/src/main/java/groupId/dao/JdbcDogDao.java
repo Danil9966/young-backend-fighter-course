@@ -2,6 +2,7 @@ package groupId.dao;
 
 import groupId.model.Dog;
 import org.flywaydb.core.Flyway;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,10 +13,10 @@ import java.util.List;
 
 public class JdbcDogDao implements DogDao {
 
-    private JdbcConnectionHolder connectionHolder;
+    private DataSource dataSource;
 
-    JdbcDogDao(JdbcConnectionHolder connectionHolder) {
-        this.connectionHolder = connectionHolder;
+    JdbcDogDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class JdbcDogDao implements DogDao {
         List<Dog> resultList = new ArrayList<>();
         Connection connection;
         try {
-            connection = connectionHolder.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE deleted = false");
             ResultSet resultSet = statement.executeQuery();
 
@@ -51,7 +52,7 @@ public class JdbcDogDao implements DogDao {
         Dog result = new Dog();
         Connection connection;
         try {
-            connection = connectionHolder.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE id = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -78,7 +79,7 @@ public class JdbcDogDao implements DogDao {
         Connection connection;
         Integer id;
         try {
-            connection = connectionHolder.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO DOGGIES (name, height, weight, age, dateOfBirth)" +
                     " VALUES " +
@@ -103,7 +104,7 @@ public class JdbcDogDao implements DogDao {
         Dog result = null;
         Connection connection;
         try {
-            connection = connectionHolder.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource);
             PreparedStatement statement = connection.prepareStatement("UPDATE DOGGIES SET deleted = true where id = ?;");
             statement.setInt(1, id);
             statement.executeUpdate();

@@ -1,20 +1,25 @@
 package groupId.proxy;
 
 import groupId.dao.JdbcConnectionHolder;
+import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
 
 
 @Aspect
 public class TransactionalAspect {
 
 
-    private final JdbcConnectionHolder connectionHolder;
+    private final DataSource dataSource;
 
-    public TransactionalAspect(JdbcConnectionHolder connectionHolder) {
-        this.connectionHolder = connectionHolder;
+    public TransactionalAspect(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Pointcut("execution(* groupId.service.IDogService.*(..))")
@@ -22,18 +27,21 @@ public class TransactionalAspect {
     }
 
     @Around("addTransactionToDogService()")
+    @SneakyThrows
     public Object addTransactionToDogServiceAdvice(ProceedingJoinPoint pjp) {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        connection.setAutoCommit(false);
+
         Object result = null;
-        connectionHolder.getConnection();
         System.out.println("ASPECT JJJ");
         try {
             result = pjp.proceed();
-            connectionHolder.commit();
+            connection.commit();
         } catch (Throwable e) {
             e.printStackTrace();
-            connectionHolder.rollback();
+            connection.rollback();
         } finally {
-            connectionHolder.closeConnection();
+            DataSourceUtils.releaseConnection(connection,dataSource);
         }
         return result;
     }
