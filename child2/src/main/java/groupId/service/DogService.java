@@ -5,6 +5,7 @@ import groupId.model.Dog;
 import groupId.proxy.annotation.Logging;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class DogService implements IDogService {
 
     @Override
     @SneakyThrows
+    @Transactional
     public Dog getDog(Integer id) {
         return dogDao.getDog(id);
     }
