@@ -2,9 +2,15 @@ package groupId.dao;
 
 import groupId.model.Dog;
 import org.flywaydb.core.Flyway;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
+import javax.swing.plaf.basic.BasicTreeUI;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,108 +19,68 @@ import java.util.List;
 
 public class JdbcDogDao implements DogDao {
 
-    private DataSource dataSource;
+    private final JdbcTemplate jdbcTemplate;
+
 
     JdbcDogDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public List<Dog> getAllDoggies() {
-        List<Dog> resultList = new ArrayList<>();
-        Connection connection;
-        try {
-            connection = DataSourceUtils.getConnection(dataSource);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE deleted = false");
-            ResultSet resultSet = statement.executeQuery();
+        List<Dog> resultList;
+        resultList = jdbcTemplate
+                .query("SELECT * FROM DOGGIES WHERE deleted = FALSE",
+                        (Object[]) null, new BeanPropertyRowMapper<>(Dog.class));
 
-            while (resultSet.next()) {
-                int i = 1;
-                resultList.add(new Dog()
-                        .setId(resultSet.getInt(i++))
-                        .setName(resultSet.getString(i++))
-                        .setHeight(resultSet.getDouble(i++))
-                        .setWeight(resultSet.getDouble(i++))
-                        .setAge(resultSet.getInt(i++))
-                        .setDateOfBirth(LocalDate.from(resultSet.getTimestamp(i).toLocalDateTime())
-
-                        ));
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return resultList;
     }
 
     @Override
     public Dog getDog(Integer id) {
-        Dog result = new Dog();
-        Connection connection;
-        try {
-            connection = DataSourceUtils.getConnection(dataSource);
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM DOGGIES WHERE id = ?");
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
+        List<Dog> resultList;
+        resultList = jdbcTemplate
+                .query("SELECT * FROM DOGGIES WHERE id = ?",
+                        new Object[]{id}, new BeanPropertyRowMapper<>(Dog.class));
 
-            while (resultSet.next()) {
-                int i = 1;
-                result
-                        .setId(resultSet.getInt(i++))
-                        .setName(resultSet.getString(i++))
-                        .setHeight(resultSet.getDouble(i++))
-                        .setWeight(resultSet.getDouble(i++))
-                        .setAge(resultSet.getInt(i++))
-                        .setDateOfBirth(LocalDate.from(resultSet.getTimestamp(i).toLocalDateTime()));
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (!resultList.isEmpty()) {
+            return resultList.get(0);
         }
-        return result;
+        return null;
     }
 
     @Override
     public Dog createDog(Dog doggie) {
-        Connection connection;
-        Integer id;
-        try {
-            connection = DataSourceUtils.getConnection(dataSource);
-            PreparedStatement statement = connection.prepareStatement(
+        KeyHolder kh = new GeneratedKeyHolder();
+        ;
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO DOGGIES (name, height, weight, age, dateOfBirth)" +
-                    " VALUES " +
-                    " (? ,?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, doggie.getName());
-            statement.setDouble(2, doggie.getHeight());
-            statement.setDouble(3, doggie.getWeight());
-            statement.setInt(4, doggie.getAge());
-            statement.setDate(5, Date.valueOf(doggie.getDateOfBirth()));
-            id = statement.executeUpdate();
+                            " VALUES " +
+                            " (? ,?, ?, ?, ?);",
+                    new String[]{"id"});
+            ps.setString(1, doggie.getName());
+            ps.setDouble(2, doggie.getHeight());
+            ps.setDouble(3, doggie.getWeight());
+            ps.setDouble(4, doggie.getAge());
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return getDog(id);
+            ps.setDate(5, Date.valueOf(doggie.getDateOfBirth()));
+            return ps;
+        }, kh);
+        return getDog((Integer) kh.getKey());
+
     }
 
     @Override
     public Dog deleteDog(Integer id) {
+        String delete = "UPDATE DOGGIES SET deleted = TRUE WHERE id = ?;";
+        int count = jdbcTemplate.update(delete, id);
 
-        Dog result = null;
-        Connection connection;
-        try {
-            connection = DataSourceUtils.getConnection(dataSource);
-            PreparedStatement statement = connection.prepareStatement("UPDATE DOGGIES SET deleted = true where id = ?;");
-            statement.setInt(1, id);
-            statement.executeUpdate();
-
-            result = getDog(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (count > 0) {
+            return getDog(id);
+        } else {
             return null;
         }
-        return result;
     }
 }
 

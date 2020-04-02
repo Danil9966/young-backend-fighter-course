@@ -5,7 +5,7 @@ import groupId.model.Dog;
 import java.time.LocalDate;
 
 public class CommonTestUtil {
-    public static final String DOGGIE_URL = "http://localhost:8080/child2-1.0-SNAPSHOT/";
+    public static final String DOGGIE_URL = "http://localhost:8080/";
 
     public static Dog getConsistentDoggie() {
         return new Dog().setAge(4)
