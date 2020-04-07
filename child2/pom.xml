@@ -141,7 +141,11 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${springVersion}</version>
         </dependency>
-
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.1.2</version>
+        </dependency>
     </dependencies>
     <distributionManagement>
         <repository>
@@ -182,7 +186,6 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-
             <!--<plugin>-->
                 <!--<groupId>org.codehaus.mojo</groupId>-->
                 <!--<artifactId>aspectj-maven-plugin</artifactId>-->
