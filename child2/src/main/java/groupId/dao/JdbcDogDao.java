@@ -1,6 +1,7 @@
 package groupId.dao;
 
 import groupId.model.Dog;
+import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,8 +23,12 @@ public class JdbcDogDao implements DogDao {
     private final JdbcTemplate jdbcTemplate;
 
 
-    JdbcDogDao(DataSource dataSource) {
+//    @SneakyThrows
+    JdbcDogDao(DataSource dataSource)  {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+
+//        Connection connection = dataSource.getConnection();
+//        connection.close();
     }
 
     @Override
