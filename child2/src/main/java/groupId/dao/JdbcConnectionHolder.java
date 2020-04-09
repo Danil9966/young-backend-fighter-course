@@ -24,8 +24,10 @@ public class JdbcConnectionHolder {
         return connection;
     }
 
+    @SneakyThrows
     public Connection getConnection() {
-        if (datasourceHolder.get() == null) {
+        Connection connection = datasourceHolder.get();
+        if (connection == null || connection.isClosed()) {
             this.createConnection();
         }
         return datasourceHolder.get();
