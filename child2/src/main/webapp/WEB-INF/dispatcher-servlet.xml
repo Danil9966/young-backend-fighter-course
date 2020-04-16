@@ -3,14 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
     <mvc:annotation-driven/>
     <!--<bean name="dataSource" class="com.mysql.cj.jdbc.MysqlDataSource">-->
     <!--<property name="url" value="jdbc:mysql://localhost:3306/prod?serverTimezone=UTC" />-->
     <!--<property name="user" value="admin" />-->
     <!--<property name="password" value="admin" />-->
     <!--</bean>-->
-    <bean name="dataSource" class="groupId.dao.TomcatDataSourceFactory">
+    <!--<bean name="dataSource" class="groupId.dao.TomcatDataSourceFactory">-->
         <!--<property name="driverClass" value="org.h2.Driver"/>-->
         <!--<property name="jdbcUrl" value="jdbc:h2:mem:prod;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE"/>-->
         <!--<property name="user" value="admin"/>-->
@@ -19,7 +20,10 @@
         <!--<property name="minPoolSize" value="1"/>-->
         <!--<property name="maxStatements" value="4"/>-->
         <!--<property name="maxStatementsPerConnection" value="6"/>-->
-    </bean>
+    <!--</bean>-->
+
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/h2db" />
+
     <bean name="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
         <property name="dataSource" ref="dataSource"/>
     </bean>
