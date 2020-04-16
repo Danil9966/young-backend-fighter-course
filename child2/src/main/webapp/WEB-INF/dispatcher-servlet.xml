@@ -10,15 +10,15 @@
     <!--<property name="user" value="admin" />-->
     <!--<property name="password" value="admin" />-->
     <!--</bean>-->
-    <bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="org.h2.Driver"/>
-        <property name="jdbcUrl" value="jdbc:h2:mem:prod;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE"/>
-        <property name="user" value="admin"/>
-        <property name="password" value="admin"/>
-        <property name="maxPoolSize" value="1"/>
-        <property name="minPoolSize" value="1"/>
-        <property name="maxStatements" value="0"/>
-        <property name="maxStatementsPerConnection" value="5"/>
+    <bean name="dataSource" class="groupId.dao.TomcatDataSourceFactory">
+        <!--<property name="driverClass" value="org.h2.Driver"/>-->
+        <!--<property name="jdbcUrl" value="jdbc:h2:mem:prod;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE"/>-->
+        <!--<property name="user" value="admin"/>-->
+        <!--<property name="password" value="admin"/>-->
+        <!--<property name="maxPoolSize" value="1"/>-->
+        <!--<property name="minPoolSize" value="1"/>-->
+        <!--<property name="maxStatements" value="4"/>-->
+        <!--<property name="maxStatementsPerConnection" value="6"/>-->
     </bean>
     <bean name="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
         <property name="dataSource" ref="dataSource"/>
