@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <properties>
         <tomcat.version>8.5.23</tomcat.version>
-        <jackson.version>2.9.10</jackson.version>
+        <jackson.version>2.11.0</jackson.version>
     </properties>
 
     <dependencies>
